@@ -1,16 +1,57 @@
 import client from "contentfuli";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { IHome, IHomeFields } from "contentful";
+import { IArticle, IArticleFields, IHome, IHomeFields } from "contentful";
+import Link from "next/link";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardTitle,
+  CardText,
+  Button,
+} from "reactstrap";
+import Article from "./articles/[article]";
 
-export default function Home({ home }: { home: IHome }) {
+export default function Home({ home }: { home: IHome; article: IArticle[] }) {
   return (
     <div>
       <Head>
         <title>{home.fields.title}</title>
       </Head>
       <main>
-        <h1>{home.fields.title}</h1>
+        <div
+          className="text-centr p-5 text-white"
+          style={{
+            background: `url("http:${home.fields.background?.fields.file.url}") no-repeat center /cover`,
+            minHeight: 300,
+          }}
+        >
+          <h1 className="mt-5">{home.fields.title}</h1>
+          <div className="mb-5">
+            {documentToReactComponents(home.fields.description!)}
+          </div>
+        </div>
+
+        <Container className="mt-5">
+          <Row>
+            {Article((article) => {
+              return (
+                <Col sm={4} key={article.fields.slug}>
+                  <Card body>
+                    <CardTitle tag="h5">{article.fields.title}</CardTitle>
+                    <CardText>{article.fields.description}</CardText>
+                    <Link href={`/articles/${article.fields.slug}`}>
+                      <Button>{article.fields.action}</Button>
+                    </Link>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </main>
     </div>
   );
@@ -22,12 +63,18 @@ export const getStaticProps: GetStaticProps = async () => {
     limit: 1,
   });
 
+  const articleEntries = await client.getEntries<IArticleFields>({
+    content_type: "article",
+    select: "fields.title, fields.slug, fields.description,fields.action",
+  });
+
   const [homePage] = home.items;
 
   return {
     props: {
       title: "Мой блог",
       home: homePage,
+      articles: articleEntries.items,
     },
   };
 };
