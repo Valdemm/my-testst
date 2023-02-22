@@ -13,9 +13,14 @@ import {
   CardText,
   Button,
 } from "reactstrap";
-import Article from "./articles/[article]";
 
-export default function Home({ home }: { home: IHome; article: IArticle[] }) {
+export default function Home({
+  home,
+  articles,
+}: {
+  home: IHome;
+  articles: IArticle[];
+}) {
   return (
     <div>
       <Head>
@@ -37,10 +42,10 @@ export default function Home({ home }: { home: IHome; article: IArticle[] }) {
 
         <Container className="mt-5">
           <Row>
-            {Article((article) => {
+            {articles.map((article) => {
               return (
                 <Col sm={4} key={article.fields.slug}>
-                  <Card body>
+                  <Card body className="cardvacan">
                     <CardTitle tag="h5">{article.fields.title}</CardTitle>
                     <CardText>{article.fields.description}</CardText>
                     <Link href={`/articles/${article.fields.slug}`}>
@@ -76,5 +81,6 @@ export const getStaticProps: GetStaticProps = async () => {
       home: homePage,
       articles: articleEntries.items,
     },
+    revalidate: 360,
   };
 };

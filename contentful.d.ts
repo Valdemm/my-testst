@@ -21,7 +21,7 @@ export interface IArticleFields {
 }
 
 export interface IArticle extends Entry<IArticleFields> {
-  [x: string]: any;
+  fields: any;
   sys: {
     id: string;
     type: string;
@@ -50,7 +50,7 @@ export interface IHomeFields {
 }
 
 export interface IHome extends Entry<IHomeFields> {
-  [x: string]: any;
+  fields: any;
   sys: {
     id: string;
     type: string;

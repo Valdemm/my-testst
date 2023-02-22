@@ -55,5 +55,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       article,
     },
+    revalidate: 360,
   };
 };
