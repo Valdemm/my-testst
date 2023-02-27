@@ -49,7 +49,7 @@
 .card {
   padding: 1rem 1.2rem;
   border-radius: var(--border-radius);
-  background: #dc4234!;
+  background: #dc4234 !important;
   border: 1px solid rgba(var(--card-border-rgb), 0);
   transition: background 200ms, border 200ms, e;
 }
@@ -275,4 +275,8 @@
   to {
     transform: rotate(0deg);
   }
+}
+
+.cardvacan {
+  background: #dc4234 !important;
 }
